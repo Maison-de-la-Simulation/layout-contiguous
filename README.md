@@ -1,10 +1,10 @@
 # Contiguous layouts
 
 This library provides two new layouts (C++17 compatible) to be used with `mdspan`
-- `layout_contiguous_right`,
-- `layout_contiguous_right`.
+- `layout_contiguous_at_right`,
+- `layout_contiguous_at_right`.
 
-The layout `layout_contiguous_right` (resp. `layout_contiguous_left`) ensures contiguity in the right (resp. left) most dimension. By default the `layout_contiguous_right` (resp. `layout_contiguous_left`) behaves as a `layout_right` (`layout_left`) if dynamic strides are not explicitly specified.
+The layout `layout_contiguous_at_right` (resp. `layout_contiguous_at_left`) ensures contiguity in the right (resp. left) most dimension. By default the `layout_contiguous_at_right` (resp. `layout_contiguous_at_left`) behaves as a `layout_right` (`layout_left`) if dynamic strides are not explicitly specified.
 
 ## Why these layouts ?
 
@@ -22,26 +22,26 @@ They provide the same API as `layout_stride`.
 
 ## Conversions
 
-- `layout_right` -> `layout_contiguous_right`
-- `layout_left` -> `layout_contiguous_left`
-- `layout_stride` -> `layout_contiguous_right` (potentially throwing if right most stride is not 1)
-- `layout_stride` -> `layout_contiguous_left` (potentially throwing if left most stride is not 1)
+- `layout_right` -> `layout_contiguous_at_right`
+- `layout_left` -> `layout_contiguous_at_left`
+- `layout_stride` -> `layout_contiguous_at_right` (potentially throwing if right most stride is not 1)
+- `layout_stride` -> `layout_contiguous_at_left` (potentially throwing if left most stride is not 1)
 
 ## Submdspan overload
 
-The free function `submdspan` is overloaded to handle these two layouts. In the case of a layout `layout_contiguous_right` (resp. `layout_contiguous_left`), `submdspan` returns a `mdspan` with layout `layout_contiguous_right` (resp. `layout_contiguous_left`) if the right (resp. left) most spec is not an integer.
+The free function `submdspan` is overloaded to handle these two layouts. In the case of a layout `layout_contiguous_at_right` (resp. `layout_contiguous_at_left`), `submdspan` returns a `mdspan` with layout `layout_contiguous_at_right` (resp. `layout_contiguous_at_left`) if the right (resp. left) most spec is not an integer.
 
 Let us write these rules with regular expressions. Let us note
 - `S = Single integer`
 - `R = Range of integers`
 - `F = Full range`
 
-Case `layout_contiguous_right`:
-- if slice specifications are of the form `.*[^S]` then `layout_contiguous_right`
+Case `layout_contiguous_at_right`:
+- if slice specifications are of the form `.*[^S]` then `layout_contiguous_at_right`
 - else `layout_stride`
 
-Case `layout_contiguous_left`:
-- if slice specifications are of the form `[^S].*` then `layout_contiguous_left`
+Case `layout_contiguous_at_left`:
+- if slice specifications are of the form `[^S].*` then `layout_contiguous_at_left`
 - else `layout_stride`
 
 Case `layout_right`:
