@@ -2,7 +2,7 @@
 
 This library provides two new layouts (C++17 compatible) to be used with `mdspan`
 - `layout_contiguous_at_right`,
-- `layout_contiguous_at_right`.
+- `layout_contiguous_at_left`.
 
 The layout `layout_contiguous_at_right` (resp. `layout_contiguous_at_left`) ensures contiguity in the right (resp. left) most dimension. By default the `layout_contiguous_at_right` (resp. `layout_contiguous_at_left`) behaves as a `layout_right` (`layout_left`) if dynamic strides are not explicitly specified.
 
