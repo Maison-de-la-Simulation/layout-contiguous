@@ -114,7 +114,7 @@ TEST( layout_contiguous_at_right, constexpr_layout_stride_constructor )
     using M = layout_contiguous_at_right::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
-    constexpr std::array< std::size_t, 3 > strides{ 20, 5, 1 };
+    constexpr std::array< std::size_t, 3 > strides { 20, 5, 1 };
     constexpr layout_stride::mapping mapping_stride( e, strides );
     constexpr M mapping( mapping_stride );
     EXPECT_EQ( mapping.extents(), e );
