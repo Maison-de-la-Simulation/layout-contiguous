@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(layout_contiguous LANGUAGES CXX)
+project(layout_contiguous VERSION 0.0.0 LANGUAGES CXX)
 
 include(CTest)
 
