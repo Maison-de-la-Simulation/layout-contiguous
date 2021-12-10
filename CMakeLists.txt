@@ -35,7 +35,7 @@ install(
 
 install(
   DIRECTORY src/layout_contiguous
-  DESTINATION include/layout_contiguous)
+  DESTINATION include)
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(cmake/layout_contiguous-config.cmake.in
