@@ -34,11 +34,14 @@ vectorization_layout_contiguous_right_ivdep( mdspan< double, dextents< 2 >, layo
                                              mdspan< const double, dextents< 2 >, layout_contiguous_at_right > b )
 {
     const std::size_t i_end = a.extent( 0 );
+    const std::size_t j_end = a.extent( 1 );
     for ( std::size_t i = 0; i < i_end; ++i )
     {
-        const std::size_t j_end = a.extent( 1 );
-#pragma GCC ivdep
+#if defined( __INTEL_COMPILER )
 #pragma ivdep
+#elif defined( __GNUG__ ) && !defined( __clang__ )
+#pragma GCC ivdep
+#endif
         for ( std::size_t j = 0; j < j_end; ++j )
         {
             a( i, j ) += std::sqrt( b( i, j ) ) + b( i, j ) * b( i, j );
@@ -51,9 +54,9 @@ vectorization_layout_contiguous_right_omp_simd( mdspan< double, dextents< 2 >, l
                                                 mdspan< const double, dextents< 2 >, layout_contiguous_at_right > b )
 {
     const std::size_t i_end = a.extent( 0 );
+    const std::size_t j_end = a.extent( 1 );
     for ( std::size_t i = 0; i < i_end; ++i )
     {
-        const std::size_t j_end = a.extent( 1 );
 #pragma omp simd
         for ( std::size_t j = 0; j < j_end; ++j )
         {
@@ -67,11 +70,14 @@ vectorization_layout_stride_ivdep( mdspan< double, dextents< 2 >, layout_stride 
                                    mdspan< const double, dextents< 2 >, layout_stride > b )
 {
     const std::size_t i_end = a.extent( 0 );
+    const std::size_t j_end = a.extent( 1 );
     for ( std::size_t i = 0; i < i_end; ++i )
     {
-        const std::size_t j_end = a.extent( 1 );
-#pragma GCC ivdep
+#if defined( __INTEL_COMPILER )
 #pragma ivdep
+#elif defined( __GNUG__ ) && !defined( __clang__ )
+#pragma GCC ivdep
+#endif
         for ( std::size_t j = 0; j < j_end; ++j )
         {
             a( i, j ) += std::sqrt( b( i, j ) ) + b( i, j ) * b( i, j );
@@ -84,9 +90,9 @@ vectorization_layout_stride_omp_simd( mdspan< double, dextents< 2 >, layout_stri
                                       mdspan< const double, dextents< 2 >, layout_stride > b )
 {
     const std::size_t i_end = a.extent( 0 );
+    const std::size_t j_end = a.extent( 1 );
     for ( std::size_t i = 0; i < i_end; ++i )
     {
-        const std::size_t j_end = a.extent( 1 );
 #pragma omp simd
         for ( std::size_t j = 0; j < j_end; ++j )
         {
