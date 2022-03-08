@@ -29,7 +29,7 @@
 
 using namespace std::experimental;
 
-TEST( submdspan, preserve_layout_contiguous_at_right )
+TEST( Submdspan, PreserveLayoutContiguousAtRight )
 {
     std::array< double, 2 * 3 * 4 > a_data;
     std::iota( a_data.begin(), a_data.end(), 0 );
@@ -42,7 +42,7 @@ TEST( submdspan, preserve_layout_contiguous_at_right )
     }
 }
 
-TEST( submdspan, preserve_layout_contiguous_at_left )
+TEST( Submdspan, PreserveLayoutContiguousAtLeft )
 {
     std::array< double, 2 * 3 * 4 > a_data;
     std::iota( a_data.begin(), a_data.end(), 0 );
