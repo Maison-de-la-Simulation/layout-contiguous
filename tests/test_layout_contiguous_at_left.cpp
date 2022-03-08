@@ -29,7 +29,7 @@
 
 using namespace std::experimental;
 
-TEST( layout_contiguous_at_left, constexpr_default_constructor )
+TEST( LayoutContiguousAtLeft, ConstexprDefaultConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
@@ -46,7 +46,7 @@ TEST( layout_contiguous_at_left, constexpr_default_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_left, constexpr_extents_constructor )
+TEST( LayoutContiguousAtLeft, ConstexprExtentsConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
@@ -66,7 +66,7 @@ TEST( layout_contiguous_at_left, constexpr_extents_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_left, constexpr_layout_left_constructor )
+TEST( LayoutContiguousAtLeft, ConstexprLayoutLeftConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
@@ -87,7 +87,7 @@ TEST( layout_contiguous_at_left, constexpr_layout_left_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_left, extents_strides_constructor )
+TEST( LayoutContiguousAtLeft, ExtentsStridesConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
@@ -108,7 +108,7 @@ TEST( layout_contiguous_at_left, extents_strides_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_left, constexpr_layout_stride_constructor )
+TEST( LayoutContiguousAtLeft, ConstexprLayoutStrideConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
@@ -130,7 +130,7 @@ TEST( layout_contiguous_at_left, constexpr_layout_stride_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_left, constexpr_other_extents_constructor )
+TEST( LayoutContiguousAtLeft, ConstexprOtherExtentsConstructor )
 {
     using OE = extents< 2, 3, 4 >;
     using E = dextents< 3 >;

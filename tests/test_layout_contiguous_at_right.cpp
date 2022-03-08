@@ -29,7 +29,7 @@
 
 using namespace std::experimental;
 
-TEST( layout_contiguous_at_right, constexpr_default_constructor )
+TEST( LayoutContiguousAtRight, ConstexprDefaultConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_right::mapping< E >;
@@ -46,7 +46,7 @@ TEST( layout_contiguous_at_right, constexpr_default_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_right, constexpr_extents_constructor )
+TEST( LayoutContiguousAtRight, ConstexprExtentsConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_right::mapping< E >;
@@ -66,7 +66,7 @@ TEST( layout_contiguous_at_right, constexpr_extents_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_right, constexpr_layout_right_constructor )
+TEST( LayoutContiguousAtRight, ConstexprLayoutRightConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_right::mapping< E >;
@@ -87,7 +87,7 @@ TEST( layout_contiguous_at_right, constexpr_layout_right_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_right, extents_strides_constructor )
+TEST( LayoutContiguousAtRight, ExtentsStridesConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_right::mapping< E >;
@@ -108,7 +108,7 @@ TEST( layout_contiguous_at_right, extents_strides_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_right, constexpr_layout_stride_constructor )
+TEST( LayoutContiguousAtRight, ConstexprLayoutStrideConstructor )
 {
     using E = dextents< 3 >;
     using M = layout_contiguous_at_right::mapping< E >;
@@ -130,7 +130,7 @@ TEST( layout_contiguous_at_right, constexpr_layout_stride_constructor )
     EXPECT_TRUE( mapping.is_strided() );
 }
 
-TEST( layout_contiguous_at_right, constexpr_other_extents_constructor )
+TEST( LayoutContiguousAtRight, constexpr_other_extents_constructor )
 {
     using OE = extents< 2, 3, 4 >;
     using E = dextents< 3 >;
