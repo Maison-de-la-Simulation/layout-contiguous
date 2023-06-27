@@ -31,28 +31,28 @@ using namespace std::experimental;
 
 TEST( LayoutContiguousAtLeft, ConstexprDefaultConstructor )
 {
-    using E = dextents< 3 >;
+    using E = dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 0, 0, 0 );
-    constexpr M mapping;
+    M mapping;
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), 0 );
     EXPECT_EQ( mapping.stride( 0 ), 0 );
     EXPECT_EQ( mapping.stride( 1 ), 0 );
     EXPECT_EQ( mapping.stride( 2 ), 0 );
-    EXPECT_TRUE( mapping.is_contiguous() );
+    EXPECT_TRUE( mapping.is_exhaustive() );
     EXPECT_TRUE( mapping.is_unique() );
     EXPECT_TRUE( mapping.is_strided() );
 }
 
 TEST( LayoutContiguousAtLeft, ConstexprExtentsConstructor )
 {
-    using E = dextents< 3 >;
+    using E = dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
-    constexpr M mapping( e );
+    M mapping( e );
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
     EXPECT_EQ( mapping.stride( 0 ), 1 );
@@ -61,19 +61,19 @@ TEST( LayoutContiguousAtLeft, ConstexprExtentsConstructor )
     EXPECT_EQ( ( mapping( 1, 0, 0 ) - mapping( 0, 0, 0 ) ), 1 );
     EXPECT_EQ( ( mapping( 0, 1, 0 ) - mapping( 0, 0, 0 ) ), 2 );
     EXPECT_EQ( ( mapping( 0, 0, 1 ) - mapping( 0, 0, 0 ) ), 6 );
-    EXPECT_TRUE( mapping.is_contiguous() );
+    EXPECT_TRUE( mapping.is_exhaustive() );
     EXPECT_TRUE( mapping.is_unique() );
     EXPECT_TRUE( mapping.is_strided() );
 }
 
 TEST( LayoutContiguousAtLeft, ConstexprLayoutLeftConstructor )
 {
-    using E = dextents< 3 >;
+    using E = dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
     constexpr layout_left::mapping mapping_left( e );
-    constexpr M mapping( mapping_left );
+    M mapping( mapping_left );
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
     EXPECT_EQ( mapping.stride( 0 ), 1 );
@@ -82,18 +82,18 @@ TEST( LayoutContiguousAtLeft, ConstexprLayoutLeftConstructor )
     EXPECT_EQ( ( mapping( 1, 0, 0 ) - mapping( 0, 0, 0 ) ), 1 );
     EXPECT_EQ( ( mapping( 0, 1, 0 ) - mapping( 0, 0, 0 ) ), 2 );
     EXPECT_EQ( ( mapping( 0, 0, 1 ) - mapping( 0, 0, 0 ) ), 6 );
-    EXPECT_TRUE( mapping.is_contiguous() );
+    EXPECT_TRUE( mapping.is_exhaustive() );
     EXPECT_TRUE( mapping.is_unique() );
     EXPECT_TRUE( mapping.is_strided() );
 }
 
 TEST( LayoutContiguousAtLeft, ExtentsStridesConstructor )
 {
-    using E = dextents< 3 >;
+    using E = dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
-    constexpr std::array< std::size_t, 2 > strides { 5, 20 };
+    constexpr std::array< int, 2 > strides { 5, 20 };
     M mapping( e, strides );
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
@@ -103,20 +103,20 @@ TEST( LayoutContiguousAtLeft, ExtentsStridesConstructor )
     EXPECT_EQ( ( mapping( 1, 0, 0 ) - mapping( 0, 0, 0 ) ), 1 );
     EXPECT_EQ( ( mapping( 0, 1, 0 ) - mapping( 0, 0, 0 ) ), 5 );
     EXPECT_EQ( ( mapping( 0, 0, 1 ) - mapping( 0, 0, 0 ) ), 20 );
-    EXPECT_FALSE( mapping.is_contiguous() );
+    EXPECT_FALSE( mapping.is_exhaustive() );
     EXPECT_TRUE( mapping.is_unique() );
     EXPECT_TRUE( mapping.is_strided() );
 }
 
 TEST( LayoutContiguousAtLeft, ConstexprLayoutStrideConstructor )
 {
-    using E = dextents< 3 >;
+    using E = dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
-    constexpr std::array< std::size_t, 3 > strides { 1, 5, 20 };
+    constexpr std::array< int, 3 > strides { 1, 5, 20 };
     constexpr layout_stride::mapping mapping_stride( e, strides );
-    constexpr M mapping( mapping_stride );
+    M mapping( mapping_stride );
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
     EXPECT_EQ( mapping.stride( 0 ), 1 );
@@ -125,20 +125,20 @@ TEST( LayoutContiguousAtLeft, ConstexprLayoutStrideConstructor )
     EXPECT_EQ( ( mapping( 1, 0, 0 ) - mapping( 0, 0, 0 ) ), 1 );
     EXPECT_EQ( ( mapping( 0, 1, 0 ) - mapping( 0, 0, 0 ) ), 5 );
     EXPECT_EQ( ( mapping( 0, 0, 1 ) - mapping( 0, 0, 0 ) ), 20 );
-    EXPECT_FALSE( mapping.is_contiguous() );
+    EXPECT_FALSE( mapping.is_exhaustive() );
     EXPECT_TRUE( mapping.is_unique() );
     EXPECT_TRUE( mapping.is_strided() );
 }
 
 TEST( LayoutContiguousAtLeft, ConstexprOtherExtentsConstructor )
 {
-    using OE = extents< 2, 3, 4 >;
-    using E = dextents< 3 >;
+    using OE = extents< int, 2, 3, 4 >;
+    using E = dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr OE oe;
     constexpr layout_contiguous_at_left::mapping omapping( oe );
-    constexpr M mapping( omapping );
+    M mapping( omapping );
     EXPECT_EQ( mapping.extents(), oe );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
     EXPECT_EQ( mapping.stride( 0 ), 1 );
@@ -147,7 +147,7 @@ TEST( LayoutContiguousAtLeft, ConstexprOtherExtentsConstructor )
     EXPECT_EQ( ( mapping( 1, 0, 0 ) - mapping( 0, 0, 0 ) ), 1 );
     EXPECT_EQ( ( mapping( 0, 1, 0 ) - mapping( 0, 0, 0 ) ), 2 );
     EXPECT_EQ( ( mapping( 0, 0, 1 ) - mapping( 0, 0, 0 ) ), 6 );
-    EXPECT_TRUE( mapping.is_contiguous() );
+    EXPECT_TRUE( mapping.is_exhaustive() );
     EXPECT_TRUE( mapping.is_unique() );
     EXPECT_TRUE( mapping.is_strided() );
 }

@@ -42,14 +42,16 @@ class mapping_contiguous_at< ContIdx, Extents, std::index_sequence< Is... > >
     static_assert( ContIdx < sizeof...( Is ) );
     static_assert( Extents::rank() == sizeof...( Is ) );
 
-    static constexpr std::size_t dyn_strides = Extents::rank() - 1;
+    static constexpr typename Extents::rank_type dyn_strides = Extents::rank() - 1;
 
 public:
+    using index_type = typename Extents::index_type;
     using size_type = typename Extents::size_type;
+    using rank_type = typename Extents::rank_type;
 
 protected:
     template < std::size_t I >
-    MDSPAN_FORCE_INLINE_FUNCTION constexpr std::size_t stride() const noexcept
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr size_type stride() const noexcept
     {
         static_assert( I < Extents::rank() );
         if constexpr ( I == ContIdx )
@@ -64,11 +66,11 @@ protected:
 
     bool internal_is_unique() const noexcept
     {
-        std::array< std::size_t, Extents::rank() > rem { Is... };
+        std::array< index_type, Extents::rank() > rem { Is... };
         std::sort( rem.begin(), rem.end(),
-                   [ this ]( std::size_t i1, std::size_t i2 ) { return m_strides[ i1 ] < m_strides[ i2 ]; } );
-        std::size_t a = 1;
-        for ( std::size_t i : rem )
+                   [ this ]( index_type i1, index_type i2 ) { return m_strides[ i1 ] < m_strides[ i2 ]; } );
+        index_type a = 1;
+        for ( index_type i : rem )
         {
             if ( m_strides[ i ] >= a )
             {
@@ -93,23 +95,23 @@ protected:
     constexpr mapping_contiguous_at& operator=( mapping_contiguous_at&& ) noexcept = default;
 
 public:
-    constexpr Extents extents() const noexcept
+    constexpr Extents const& extents() const noexcept
     {
         return m_extents;
     }
 
-    constexpr std::array< size_type, Extents::rank() > strides() const noexcept
+    constexpr std::array< index_type, Extents::rank() > strides() const noexcept
     {
         return m_strides;
     }
 
-    constexpr size_type required_span_size() const noexcept
+    constexpr index_type required_span_size() const noexcept
     {
         return ( 1 + ... + ( ( m_extents.extent( Is ) - 1 ) * stride< Is >() ) );
     }
 
     template < class... Indices >
-    MDSPAN_FORCE_INLINE_FUNCTION constexpr size_type operator()( Indices&&... indices ) const noexcept
+    MDSPAN_FORCE_INLINE_FUNCTION constexpr index_type operator()( Indices&&... indices ) const noexcept
     {
         static_assert( sizeof...( Indices ) == Extents::rank() );
         assert( ( ... && ( indices < m_extents.extent( Is ) ) ) );
@@ -122,7 +124,7 @@ public:
         return true;
     }
 
-    static constexpr bool is_always_contiguous() noexcept
+    static constexpr bool is_always_exhaustive() noexcept
     {
         return false;
     }
@@ -137,13 +139,13 @@ public:
         return true;
     }
 
-    bool is_contiguous() const noexcept
+    bool is_exhaustive() const noexcept
     {
-        std::array< std::size_t, Extents::rank() > rem { Is... };
+        std::array< index_type, Extents::rank() > rem { Is... };
         std::sort( rem.begin(), rem.end(),
-                   [ this ]( std::size_t i1, std::size_t i2 ) { return m_strides[ i1 ] < m_strides[ i2 ]; } );
-        std::size_t a = 1;
-        for ( std::size_t i : rem )
+                   [ this ]( index_type i1, index_type i2 ) { return m_strides[ i1 ] < m_strides[ i2 ]; } );
+        index_type a = 1;
+        for ( index_type i : rem )
         {
             if ( m_strides[ i ] <= a )
             {
@@ -162,16 +164,16 @@ public:
         return true;
     }
 
-    constexpr size_type stride( std::size_t i ) const noexcept
+    constexpr index_type stride( rank_type i ) const noexcept
     {
         assert( i < m_strides.size() );
         return m_strides[ i ];
     }
 
 protected:
-    Extents m_extents = Extents( std::array< size_type, Extents::rank_dynamic() > {} );
+    Extents m_extents = Extents( std::array< index_type, Extents::rank_dynamic() > {} );
 
-    std::array< size_type, Extents::rank() > m_strides {};
+    std::array< index_type, Extents::rank() > m_strides {};
 };
 
 } // namespace detail

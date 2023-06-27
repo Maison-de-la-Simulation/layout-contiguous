@@ -34,9 +34,9 @@ TEST( Submdspan, PreserveLayoutContiguousAtRight )
     std::array< double, 2 * 3 * 4 > a_data;
     std::iota( a_data.begin(), a_data.end(), 0 );
 
-    mdspan< double, dextents< 3 >, layout_contiguous_at_right > a_mdspan( a_data.data(), 2, 3, 4 );
-    mdspan< double, dextents< 1 >, layout_contiguous_at_right > a_submdspan = submdspan( a_mdspan, 1, 1, full_extent );
-    for ( std::size_t i = 0; i < a_submdspan.size(); ++i )
+    mdspan< double, dextents< int, 3 >, layout_contiguous_at_right > a_mdspan( a_data.data(), 2, 3, 4 );
+    mdspan< double, dextents< int, 1 >, layout_contiguous_at_right > a_submdspan = submdspan( a_mdspan, 1, 1, full_extent );
+    for ( int i = 0; i < a_submdspan.extent( 0 ); ++i )
     {
         EXPECT_EQ( a_submdspan( i ), 1 * ( 3 * 4 ) + 1 * 4 + i * 1 );
     }
@@ -47,9 +47,9 @@ TEST( Submdspan, PreserveLayoutContiguousAtLeft )
     std::array< double, 2 * 3 * 4 > a_data;
     std::iota( a_data.begin(), a_data.end(), 0 );
 
-    mdspan< double, dextents< 3 >, layout_contiguous_at_left > a_mdspan( a_data.data(), 2, 3, 4 );
-    mdspan< double, dextents< 1 >, layout_contiguous_at_left > a_submdspan = submdspan( a_mdspan, full_extent, 1, 1 );
-    for ( std::size_t i = 0; i < a_submdspan.size(); ++i )
+    mdspan< double, dextents< int, 3 >, layout_contiguous_at_left > a_mdspan( a_data.data(), 2, 3, 4 );
+    mdspan< double, dextents< int, 1 >, layout_contiguous_at_left > a_submdspan = submdspan( a_mdspan, full_extent, 1, 1 );
+    for ( int i = 0; i < a_submdspan.extent( 0 ); ++i )
     {
         EXPECT_EQ( a_submdspan( i ), i * 1 + 1 * 2 + 1 * ( 2 * 3 ) );
     }

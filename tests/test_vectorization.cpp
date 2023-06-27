@@ -30,8 +30,8 @@
 using namespace std::experimental;
 
 void
-vectorization_layout_contiguous_right_ivdep( mdspan< double, dextents< 2 >, layout_contiguous_at_right > a,
-                                             mdspan< const double, dextents< 2 >, layout_contiguous_at_right > b )
+vectorization_layout_contiguous_right_ivdep( mdspan< double, dextents< int, 2 >, layout_contiguous_at_right > a,
+                                             mdspan< const double, dextents< int, 2 >, layout_contiguous_at_right > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
@@ -50,8 +50,8 @@ vectorization_layout_contiguous_right_ivdep( mdspan< double, dextents< 2 >, layo
 }
 
 void
-vectorization_layout_contiguous_right_omp_simd( mdspan< double, dextents< 2 >, layout_contiguous_at_right > a,
-                                                mdspan< const double, dextents< 2 >, layout_contiguous_at_right > b )
+vectorization_layout_contiguous_right_omp_simd( mdspan< double, dextents< int, 2 >, layout_contiguous_at_right > a,
+                                                mdspan< const double, dextents< int, 2 >, layout_contiguous_at_right > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
@@ -66,8 +66,8 @@ vectorization_layout_contiguous_right_omp_simd( mdspan< double, dextents< 2 >, l
 }
 
 void
-vectorization_layout_stride_ivdep( mdspan< double, dextents< 2 >, layout_stride > a,
-                                   mdspan< const double, dextents< 2 >, layout_stride > b )
+vectorization_layout_stride_ivdep( mdspan< double, dextents< int, 2 >, layout_stride > a,
+                                   mdspan< const double, dextents< int, 2 >, layout_stride > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
@@ -86,8 +86,8 @@ vectorization_layout_stride_ivdep( mdspan< double, dextents< 2 >, layout_stride 
 }
 
 void
-vectorization_layout_stride_omp_simd( mdspan< double, dextents< 2 >, layout_stride > a,
-                                      mdspan< const double, dextents< 2 >, layout_stride > b )
+vectorization_layout_stride_omp_simd( mdspan< double, dextents< int, 2 >, layout_stride > a,
+                                      mdspan< const double, dextents< int, 2 >, layout_stride > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );

@@ -36,10 +36,14 @@ struct layout_contiguous_at_left
     template < class Extents >
     class mapping : public detail::mapping_contiguous_at< 0, Extents, std::make_index_sequence< Extents::rank() > >
     {
-        static constexpr std::size_t dyn_rank = Extents::rank() - 1;
+        static constexpr typename Extents::rank_type dyn_rank = Extents::rank() - 1;
 
     public:
-        using size_type = typename Extents::size_type;
+        using extents_type = Extents;
+        using index_type = typename extents_type::index_type;
+        using size_type = typename extents_type::size_type;
+        using rank_type = typename extents_type::rank_type;
+        using layout_type = layout_contiguous_at_left;
 
         constexpr mapping() noexcept = default;
 
@@ -59,7 +63,7 @@ struct layout_contiguous_at_left
             }
         }
 
-        constexpr mapping( Extents const& extents, std::array< size_type, dyn_rank > const& strides )
+        constexpr mapping( Extents const& extents, std::array< index_type, dyn_rank > const& strides )
         {
             this->m_extents = extents;
             this->m_strides.front() = 1;
@@ -82,7 +86,7 @@ struct layout_contiguous_at_left
             }
 
             this->m_extents = x.extents();
-            for ( std::size_t i = 0; i < Extents::rank(); ++i )
+            for ( rank_type i = 0; i < Extents::rank(); ++i )
             {
                 this->m_strides[ i ] = x.stride( i );
             }
@@ -121,7 +125,7 @@ submdspan( std::experimental::mdspan< ET, EP, layout_contiguous_at_left, AP > co
     using first_element_type = std::tuple_element_t< 0, std::tuple< SliceSpecs... > >;
 
     layout_stride::mapping< EP > mapping( contiguous_span.extents(), contiguous_span.mapping().strides() );
-    mdspan< ET, EP, layout_stride, AP > strided_span( contiguous_span.data(), mapping );
+    mdspan< ET, EP, layout_stride, AP > strided_span( contiguous_span.data_handle(), mapping );
     mdspan s = submdspan( strided_span, std::forward< SliceSpecs >( slices )... );
     if constexpr ( std::is_convertible_v< first_element_type, std::size_t > )
     {
@@ -144,7 +148,11 @@ struct layout_contiguous_at_right
         static constexpr std::size_t dyn_rank = Extents::rank() - 1;
 
     public:
-        using size_type = typename Extents::size_type;
+        using extents_type = Extents;
+        using index_type = typename extents_type::index_type;
+        using size_type = typename extents_type::size_type;
+        using rank_type = typename extents_type::rank_type;
+        using layout_type = layout_contiguous_at_right;
 
         constexpr mapping() noexcept = default;
 
@@ -158,16 +166,16 @@ struct layout_contiguous_at_right
         constexpr mapping( std::experimental::layout_right::mapping< Extents > const& x ) noexcept
         {
             this->m_extents = x.extents();
-            for ( std::size_t i = 0; i < Extents::rank(); ++i )
+            for ( rank_type i = 0; i < Extents::rank(); ++i )
             {
                 this->m_strides[ i ] = x.stride( i );
             }
         }
 
-        constexpr mapping( Extents const& extents, std::array< size_type, dyn_rank > const& strides )
+        constexpr mapping( Extents const& extents, std::array< index_type, dyn_rank > const& strides )
         {
             this->m_extents = extents;
-            for ( std::size_t i = 0; i < strides.size(); ++i )
+            for ( rank_type i = 0; i < dyn_rank; ++i )
             {
                 this->m_strides[ i ] = strides[ i ];
             }
@@ -187,7 +195,7 @@ struct layout_contiguous_at_right
             }
 
             this->m_extents = x.extents();
-            for ( std::size_t i = 0; i < Extents::rank(); ++i )
+            for ( rank_type i = 0; i < Extents::rank(); ++i )
             {
                 this->m_strides[ i ] = x.stride( i );
             }
@@ -226,9 +234,9 @@ submdspan( std::experimental::mdspan< ET, EP, layout_contiguous_at_right, AP > c
     using last_element_type = std::tuple_element_t< EP::rank() - 1, std::tuple< SliceSpecs... > >;
 
     layout_stride::mapping< EP > mapping( contiguous_span.extents(), contiguous_span.mapping().strides() );
-    mdspan< ET, EP, layout_stride, AP > strided_span( contiguous_span.data(), mapping );
+    mdspan< ET, EP, layout_stride, AP > strided_span( contiguous_span.data_handle(), mapping );
     mdspan s = submdspan( strided_span, std::forward< SliceSpecs >( slices )... );
-    if constexpr ( std::is_convertible_v< last_element_type, std::size_t > )
+    if constexpr ( std::is_convertible_v< last_element_type, typename EP::index_type > )
     {
         return s;
     }

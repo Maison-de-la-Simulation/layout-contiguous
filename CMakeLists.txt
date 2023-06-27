@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(layout_contiguous
-  VERSION 0.3.0
+  VERSION 0.6.0
   LANGUAGES CXX)
 
 include(CTest)
 
-find_package(mdspan 0.3.0 EXACT CONFIG REQUIRED)
+find_package(mdspan 0.6.0 EXACT CONFIG REQUIRED)
 
 add_library(layout_contiguous INTERFACE)
 target_include_directories(layout_contiguous
