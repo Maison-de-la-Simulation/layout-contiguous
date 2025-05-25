@@ -26,7 +26,7 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
-#include <experimental/mdspan>
+#include <mdspan/mdspan.hpp>
 #include <stdexcept>
 
 #include "mapping_contiguous.hpp"
@@ -50,11 +50,11 @@ struct layout_contiguous_at_left
         constexpr mapping( mapping const& ) noexcept = default;
 
         constexpr mapping( Extents const& extents ) noexcept
-            : mapping( std::experimental::layout_left::mapping< Extents >( extents ) )
+            : mapping( Kokkos::layout_left::mapping< Extents >( extents ) )
         {
         }
 
-        constexpr mapping( std::experimental::layout_left::mapping< Extents > const& x ) noexcept
+        constexpr mapping( Kokkos::layout_left::mapping< Extents > const& x ) noexcept
         {
             this->m_extents = x.extents();
             for ( std::size_t i = 0; i < Extents::rank(); ++i )
@@ -78,7 +78,7 @@ struct layout_contiguous_at_left
             }
         }
 
-        constexpr mapping( std::experimental::layout_stride::mapping< Extents > const& x )
+        constexpr mapping( Kokkos::layout_stride::mapping< Extents > const& x )
         {
             if ( x.stride( 0 ) != 1 )
             {
@@ -118,23 +118,21 @@ struct layout_contiguous_at_left
 
 template < class ET, class EP, class AP, class... SliceSpecs >
 constexpr auto
-submdspan( std::experimental::mdspan< ET, EP, layout_contiguous_at_left, AP > const& contiguous_span,
-           SliceSpecs&&... slices )
+submdspan( Kokkos::mdspan< ET, EP, layout_contiguous_at_left, AP > const& contiguous_span, SliceSpecs&&... slices )
 {
-    using namespace std::experimental;
     using first_element_type = std::tuple_element_t< 0, std::tuple< SliceSpecs... > >;
 
-    layout_stride::mapping< EP > mapping( contiguous_span.extents(), contiguous_span.mapping().strides() );
-    mdspan< ET, EP, layout_stride, AP > strided_span( contiguous_span.data_handle(), mapping );
-    mdspan s = submdspan( strided_span, std::forward< SliceSpecs >( slices )... );
-    if constexpr ( std::is_convertible_v< first_element_type, std::size_t > )
+    Kokkos::layout_stride::mapping< EP > mapping( contiguous_span.extents(), contiguous_span.mapping().strides() );
+    Kokkos::mdspan< ET, EP, Kokkos::layout_stride, AP > strided_span( contiguous_span.data_handle(), mapping );
+    Kokkos::mdspan s = Kokkos::submdspan( strided_span, std::forward< SliceSpecs >( slices )... );
+    if constexpr ( std::is_convertible_v< first_element_type, typename EP::index_type > )
     {
         return s;
     }
     else
     {
         using SubEP = typename decltype( s )::extents_type;
-        return mdspan< ET, SubEP, layout_contiguous_at_left, AP >( s );
+        return Kokkos::mdspan< ET, SubEP, layout_contiguous_at_left, AP >( s );
     }
 }
 
@@ -159,11 +157,11 @@ struct layout_contiguous_at_right
         constexpr mapping( mapping const& ) noexcept = default;
 
         constexpr mapping( Extents const& extents ) noexcept
-            : mapping( std::experimental::layout_right::mapping< Extents >( extents ) )
+            : mapping( Kokkos::layout_right::mapping< Extents >( extents ) )
         {
         }
 
-        constexpr mapping( std::experimental::layout_right::mapping< Extents > const& x ) noexcept
+        constexpr mapping( Kokkos::layout_right::mapping< Extents > const& x ) noexcept
         {
             this->m_extents = x.extents();
             for ( rank_type i = 0; i < Extents::rank(); ++i )
@@ -187,7 +185,7 @@ struct layout_contiguous_at_right
             }
         }
 
-        constexpr mapping( std::experimental::layout_stride::mapping< Extents > const& x )
+        constexpr mapping( Kokkos::layout_stride::mapping< Extents > const& x )
         {
             if ( x.stride( Extents::rank() - 1 ) != 1 )
             {
@@ -227,15 +225,13 @@ struct layout_contiguous_at_right
 
 template < class ET, class EP, class AP, class... SliceSpecs >
 constexpr auto
-submdspan( std::experimental::mdspan< ET, EP, layout_contiguous_at_right, AP > const& contiguous_span,
-           SliceSpecs&&... slices )
+submdspan( Kokkos::mdspan< ET, EP, layout_contiguous_at_right, AP > const& contiguous_span, SliceSpecs&&... slices )
 {
-    using namespace std::experimental;
     using last_element_type = std::tuple_element_t< EP::rank() - 1, std::tuple< SliceSpecs... > >;
 
-    layout_stride::mapping< EP > mapping( contiguous_span.extents(), contiguous_span.mapping().strides() );
-    mdspan< ET, EP, layout_stride, AP > strided_span( contiguous_span.data_handle(), mapping );
-    mdspan s = submdspan( strided_span, std::forward< SliceSpecs >( slices )... );
+    Kokkos::layout_stride::mapping< EP > mapping( contiguous_span.extents(), contiguous_span.mapping().strides() );
+    Kokkos::mdspan< ET, EP, Kokkos::layout_stride, AP > strided_span( contiguous_span.data_handle(), mapping );
+    Kokkos::mdspan s = Kokkos::submdspan( strided_span, std::forward< SliceSpecs >( slices )... );
     if constexpr ( std::is_convertible_v< last_element_type, typename EP::index_type > )
     {
         return s;
@@ -243,6 +239,6 @@ submdspan( std::experimental::mdspan< ET, EP, layout_contiguous_at_right, AP > c
     else
     {
         using SubEP = typename decltype( s )::extents_type;
-        return mdspan< ET, SubEP, layout_contiguous_at_right, AP >( s );
+        return Kokkos::mdspan< ET, SubEP, layout_contiguous_at_right, AP >( s );
     }
 }
