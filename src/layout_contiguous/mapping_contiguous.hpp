@@ -27,7 +27,7 @@
 #include <array>
 #include <cassert>
 #include <cstdint>
-#include <experimental/mdspan>
+#include <mdspan/mdspan.hpp>
 #include <utility>
 
 namespace detail

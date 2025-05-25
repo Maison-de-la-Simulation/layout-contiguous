@@ -23,15 +23,13 @@
 
 #include <algorithm>
 #include <array>
-#include <experimental/mdspan>
 #include <gtest/gtest.h>
 #include <layout_contiguous.hpp>
+#include <mdspan/mdspan.hpp>
 
-using namespace std::experimental;
-
-TEST( LayoutContiguousAtLeft, ConstexprDefaultConstructor )
+TEST( layout_contiguous_at_left, constexpr_default_constructor )
 {
-    using E = dextents< int, 3 >;
+    using E = Kokkos::dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 0, 0, 0 );
@@ -48,7 +46,7 @@ TEST( LayoutContiguousAtLeft, ConstexprDefaultConstructor )
 
 TEST( LayoutContiguousAtLeft, ConstexprExtentsConstructor )
 {
-    using E = dextents< int, 3 >;
+    using E = Kokkos::dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
@@ -68,12 +66,12 @@ TEST( LayoutContiguousAtLeft, ConstexprExtentsConstructor )
 
 TEST( LayoutContiguousAtLeft, ConstexprLayoutLeftConstructor )
 {
-    using E = dextents< int, 3 >;
+    using E = Kokkos::dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
-    constexpr layout_left::mapping mapping_left( e );
-    M mapping( mapping_left );
+    constexpr Kokkos::layout_left::mapping mapping_left( e );
+    constexpr M mapping( mapping_left );
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
     EXPECT_EQ( mapping.stride( 0 ), 1 );
@@ -89,7 +87,7 @@ TEST( LayoutContiguousAtLeft, ConstexprLayoutLeftConstructor )
 
 TEST( LayoutContiguousAtLeft, ExtentsStridesConstructor )
 {
-    using E = dextents< int, 3 >;
+    using E = Kokkos::dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
@@ -110,13 +108,13 @@ TEST( LayoutContiguousAtLeft, ExtentsStridesConstructor )
 
 TEST( LayoutContiguousAtLeft, ConstexprLayoutStrideConstructor )
 {
-    using E = dextents< int, 3 >;
+    using E = Kokkos::dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr E e( 2, 3, 4 );
     constexpr std::array< int, 3 > strides { 1, 5, 20 };
-    constexpr layout_stride::mapping mapping_stride( e, strides );
-    M mapping( mapping_stride );
+    constexpr Kokkos::layout_stride::mapping mapping_stride( e, strides );
+    constexpr M mapping( mapping_stride );
     EXPECT_EQ( mapping.extents(), e );
     EXPECT_EQ( mapping.required_span_size(), ( mapping( 1, 2, 3 ) - mapping( 0, 0, 0 ) + 1 ) );
     EXPECT_EQ( mapping.stride( 0 ), 1 );
@@ -132,8 +130,8 @@ TEST( LayoutContiguousAtLeft, ConstexprLayoutStrideConstructor )
 
 TEST( LayoutContiguousAtLeft, ConstexprOtherExtentsConstructor )
 {
-    using OE = extents< int, 2, 3, 4 >;
-    using E = dextents< int, 3 >;
+    using OE = Kokkos::extents< int, 2, 3, 4 >;
+    using E = Kokkos::dextents< int, 3 >;
     using M = layout_contiguous_at_left::mapping< E >;
 
     constexpr OE oe;

@@ -6,7 +6,7 @@ project(layout_contiguous
 
 include(CTest)
 
-find_package(mdspan 0.6.0 EXACT CONFIG REQUIRED)
+find_package(mdspan CONFIG REQUIRED)
 
 add_library(layout_contiguous INTERFACE)
 target_include_directories(layout_contiguous

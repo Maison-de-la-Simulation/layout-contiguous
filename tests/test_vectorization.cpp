@@ -23,15 +23,14 @@
 
 #include <algorithm>
 #include <cmath>
-#include <experimental/mdspan>
 #include <layout_contiguous.hpp>
+#include <mdspan/mdspan.hpp>
 #include <vector>
 
-using namespace std::experimental;
-
 void
-vectorization_layout_contiguous_right_ivdep( mdspan< double, dextents< int, 2 >, layout_contiguous_at_right > a,
-                                             mdspan< const double, dextents< int, 2 >, layout_contiguous_at_right > b )
+vectorization_layout_contiguous_right_ivdep(
+    Kokkos::mdspan< double, Kokkos::dextents< int, 2 >, layout_contiguous_at_right > a,
+    Kokkos::mdspan< const double, Kokkos::dextents< int, 2 >, layout_contiguous_at_right > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
@@ -51,8 +50,8 @@ vectorization_layout_contiguous_right_ivdep( mdspan< double, dextents< int, 2 >,
 
 void
 vectorization_layout_contiguous_right_omp_simd(
-    mdspan< double, dextents< int, 2 >, layout_contiguous_at_right > a,
-    mdspan< const double, dextents< int, 2 >, layout_contiguous_at_right > b )
+    Kokkos::mdspan< double, Kokkos::dextents< int, 2 >, layout_contiguous_at_right > a,
+    Kokkos::mdspan< const double, Kokkos::dextents< int, 2 >, layout_contiguous_at_right > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
@@ -67,8 +66,8 @@ vectorization_layout_contiguous_right_omp_simd(
 }
 
 void
-vectorization_layout_stride_ivdep( mdspan< double, dextents< int, 2 >, layout_stride > a,
-                                   mdspan< const double, dextents< int, 2 >, layout_stride > b )
+vectorization_layout_stride_ivdep( Kokkos::mdspan< double, Kokkos::dextents< int, 2 >, Kokkos::layout_stride > a,
+                                   Kokkos::mdspan< const double, Kokkos::dextents< int, 2 >, Kokkos::layout_stride > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
@@ -87,8 +86,9 @@ vectorization_layout_stride_ivdep( mdspan< double, dextents< int, 2 >, layout_st
 }
 
 void
-vectorization_layout_stride_omp_simd( mdspan< double, dextents< int, 2 >, layout_stride > a,
-                                      mdspan< const double, dextents< int, 2 >, layout_stride > b )
+vectorization_layout_stride_omp_simd(
+    Kokkos::mdspan< double, Kokkos::dextents< int, 2 >, Kokkos::layout_stride > a,
+    Kokkos::mdspan< const double, Kokkos::dextents< int, 2 >, Kokkos::layout_stride > b )
 {
     const std::size_t i_end = a.extent( 0 );
     const std::size_t j_end = a.extent( 1 );
